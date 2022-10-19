@@ -16,7 +16,14 @@
 
 
                 <?php
-                    $query = "select * from posts" ;
+
+                    if(isset($_GET['category']))
+                    {
+                        $post_category_id = $_GET['category'];
+
+                    }
+
+                    $query = "select * from posts where post_category_id = '{$post_category_id}'" ;
                     $select_all_posts_query = mysqli_query($connection , $query);
                     while($row = mysqli_fetch_assoc($select_all_posts_query))
                     {

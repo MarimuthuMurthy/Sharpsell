@@ -1,38 +1,38 @@
-<?php include "includes/admin_header.php"?>
+<?php include "includes/admin_header.php" ?>
 
 
-    <div id="wrapper">
+<div id="wrapper">
 
 
-        <!-- Navigation -->
-        <?php include "includes/admin_navigation.php"?>
+    <!-- Navigation -->
+    <?php include "includes/admin_navigation.php" ?>
 
 
-        <div id="page-wrapper">
+    <div id="page-wrapper">
 
-            <div class="container-fluid">
+        <div class="container-fluid">
 
-                <!-- Page Heading -->
-                <div class="row">
-                    <div class="col-lg-12">
+            <!-- Page Heading -->
+            <div class="row">
+                <div class="col-lg-12">
 
 
-                        <h1 class="page-header">
-                            Welcome to admin
-                            <small>Author</small>
-                        </h1>
-                        
-                    </div>
+                    <h1 class="page-header">
+                        Welcome to admin
+                        <small>Author</small>
+                    </h1>
+
                 </div>
-                <!-- /.row -->
-
             </div>
-            <!-- /.container-fluid -->
+            <!-- /.row -->
 
         </div>
-        <!-- /#page-wrapper -->
+        <!-- /.container-fluid -->
 
     </div>
-    <!-- /#wrapper -->
+    <!-- /#page-wrapper -->
 
-    <?php include "includes/admin_footer.php"?>
+</div>
+<!-- /#wrapper -->
+
+<?php include "includes/admin_footer.php" ?>
