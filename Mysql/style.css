@@ -1,0 +1,30 @@
+.updateTitle
+{
+    text-align: center;
+    background-color: blueviolet;
+    margin-left: 60px;
+    margin-right: 60px;
+    color: aliceblue;
+}
+.create_title
+{
+    text-align: center;
+    background-color:aqua;
+    margin-left: 60px;
+    margin-right: 60px;
+    color: black;
+    text-shadow: 2px;
+}
+.submit
+{
+    background-color:aquamarine;
+    margin-left: 90px;
+}
+.deleteTitle
+{
+    text-align: center;
+    background-color: olivedrab;
+    margin-left: 60px;
+    margin-right: 60px;
+    color: aliceblue;
+}

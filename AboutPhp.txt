@@ -1,0 +1,36 @@
+About Php :
+***********
+
+    syntax : 
+    ********
+
+        <?php
+
+                code
+        
+        ?>
+
+    variables : 
+    ***********
+
+            * variables starts with dollar symbol ("$")
+            * variables starts with either alphabets or "_".
+            * variables cannot start with numbers or special characters .
+            * "this" variable also not applicable .
+
+
+            print hello my name is Murthy ($firstName = "murthy"): 
+            *******************************
+            types :
+            *******
+                    1 .echo "hello my name is {$firstName}"
+                    2 .echo "hello my name is"," ",$firstName;
+                    3 .echo "hello my name is ".$firstName;
+
+constants  :
+************
+
+define usning function : 
+
+
+define("name" , "value");

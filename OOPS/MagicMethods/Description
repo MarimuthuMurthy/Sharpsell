@@ -1,0 +1,14 @@
+#   17 MAGICAL METHODS :
+    ******************
+
+1 .     __construct()
+2 .     __destruct()
+3 .     __call()
+4 .     __get()
+5 .     __set()
+6 .     __isset()
+7 .     __unset()
+8 .     __sleep()
+9 .     __wakeup()
+10 .    __toString()
+11 .    __invoke()

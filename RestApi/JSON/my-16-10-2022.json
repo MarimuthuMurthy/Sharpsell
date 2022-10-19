@@ -1,0 +1,26 @@
+[
+    {
+        "id": "1",
+        "name": "murthy",
+        "department": "cse",
+        "year": "1"
+    },
+    {
+        "id": "2",
+        "name": "ram",
+        "department": "ece",
+        "year": "2"
+    },
+    {
+        "id": "3",
+        "name": "andal",
+        "department": "mech",
+        "year": "1"
+    },
+    {
+        "id": "11",
+        "name": "andal",
+        "department": "cse",
+        "year": "3"
+    }
+]

@@ -1,0 +1,93 @@
+# multiple inheritence doesnt support in php .
+# 
+
+
+
+PRECEDENCE : 
+************
+
+trait example
+{
+##   TRAIT CONTAIN METHOD DISPLAY .
+    public void display()
+    {
+        echo "iam displaying from trait example";
+    }
+}
+class example2
+{
+    use example;
+##  EXAMPLE2 CLASS ALSO CONTAIN DISPLAY .
+##  HIGH PRECEDENCE IS FOR OVERRIDDEN METHOD .
+    public void display()
+    {
+        echo "iam displaying from example2";
+    }
+}
+
+
+
+$eg2 = new example2();
+$eg2.display();
+
+
+OUTPUT :
+********
+
+iam displaying from example2
+
+## HIGH PRECEDENCE FOR OVERRIDEN METHOD NOT FOR TRAIT
+
+
+
+
+###############   another example    #############
+
+
+class coffeemaker 
+{
+    public function makecoffe()
+    {
+        echo "Iam making coffe from coffeemaker" ;
+    }
+}
+
+
+class latte extends coffeemaker
+{
+##   latte extends coffemekaer so it contains makecoffe method
+
+
+##  Latte trait also contain makecoffee() method .
+
+## if latte object calls makecoffee() method , high preference given for Trait , not for inherit method .
+    use latteTrait;
+}
+
+trait lattetrait
+{
+    public function makingLatte()
+    {
+        echo "Iam makling lattee";
+    }
+    public function makecoffee()
+    {
+        echo "iam making coffe from trait";
+    }
+}
+
+
+$lat2 = new latte();
+$lat2.makecoffee();
+
+## OUTPUT : iam making coffe from trait
+
+
+*********************************
+## WE CAN USE TRAIT INSIDE TRAIT |
+*********************************
+
+
+## STATIC methods and variabes
+        -   can be assigned seperatly in traits .
+        

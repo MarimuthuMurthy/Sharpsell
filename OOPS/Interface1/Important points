@@ -1,0 +1,21 @@
+
+
+#   ABSTRACT CLASS
+    **************
+
+    *   Abstract class can contain method implementation .
+    *   Abstract class can contain properties . 
+    *   Abstract class can have private & protected methods .
+    *   Class can only extends a single class .
+
+
+
+
+
+#   INTERFACE
+    *********
+
+    *   Interface can only contain method declaration.
+    *   Interface can only contain methods & constants.
+    *   Interface only have public methods .
+    *   Class can implement multiple interfaces . 

@@ -1,0 +1,74 @@
+
+
+
+
+INTRODUCTION
+************
+
+
+API :
+****
+    *   Application Prohram Interface
+    *   APIS's are everywhere
+    *   Contract provided by one piece of software to another
+    *   structure request and response .
+
+
+REST API :
+**********
+
+REST  - Representational State Transfer .
+API   - Application Programming Interface .
+Rules :
+*******
+
+    *   create
+    *   read
+    *   update
+    *   delete
+
+eg :
+    *   mobile application softwares .
+
+
+
+Understanding REST API Methods :
+********************************
+
+REST provides a block of php methods which are used to alter the data .
+
+the common HTTP methods are :
+*****************************
+
+    GET    : used for reading and retrieving data .
+    POST   :  used for inserting data .
+    PUT    :  used for updating data .
+    DELETE : used for deleting data . 
+    HEAD , OPTIONS , PATCH
+
+
+
+*   any action URL is invoked , it perfroms an individual methods on that URL .
+
+
+(web application)         (API)              (server) 
+CUSTOMERS       ------------------------->   KITCHEN
+                <-------------------------
+
+
+
+header('Content-Type : application/json');
+    * application return in json format .
+
+header('Access-Control-Allow-Methods : PUT');
+
+header('Access-Control-Allow-Origin : *');
+
+header('Access-Control-Allow-Headers : <header-name>');
+
+
+
+
+
+
+
