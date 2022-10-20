@@ -23,7 +23,7 @@
                 </li>
                 <li class="divider"></li>
                 <li>
-                    <a href="#"><i class="fa fa-fw fa-power-off"></i> Log Out</a>
+                    <a href="../includes/logout.php"><i class="fa fa-fw fa-power-off"></i> Log Out</a>
                 </li>
             </ul>
         </li>
@@ -40,7 +40,7 @@
                 <a href="index.php"><i class="fa fa-fw fa-edit"></i> dashboard</a>
             </li>
             <li>
-                <a href="index-rtl.html"><i class="fa fa-fw fa-edit"></i> profile</a>
+                <a href="profile.php"><i class="fa fa-fw fa-edit"></i> profile</a>
             </li>
             <li>
                 <a href="javascript:;" data-toggle="collapse" data-target="#post_dropdown"><i class="fa fa-fw fa-arrows-v"></i> Posts <i class="fa fa-fw fa-caret-down"></i></a>
