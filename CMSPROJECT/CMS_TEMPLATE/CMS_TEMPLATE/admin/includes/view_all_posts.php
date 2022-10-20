@@ -59,7 +59,18 @@
                 <td><?= $row['post_status'] ?></td>
                 <td> <img width='100' height='50' src=../images/<?= $row['post_image'] ?>></td>
                 <td><?= $row['post_tags'] ?></td>
-                <td><?= $row['post_comment_count'] ?></td>
+                <td><?= $post_comment_count ?></td>
+
+
+
+
+
+                
+
+
+
+
+
                 <td><?= $row['post_date'] ?></td>
                 <td><a href="posts.php?delete=<?= $post_id ?>">delete</a></td>
                 <td><a href="posts.php?source=edit_post&edit_id=<?= $post_id ?>">edit</a></td>
@@ -71,7 +82,9 @@
 <?php
 if (isset($_GET['delete'])) {
     $del_id = $_GET['delete'];
+    $update_down = "update posts set post_comment_count = post_comment_count-1 where post_id = '{$del_id}'";
     $query = "delete from posts where post_id = '{$del_id}'";
+    mysqli_query($connection , $update_down);
     mysqli_query($connection, $query) or die("connection failed");
     header("Location: posts.php");
 }

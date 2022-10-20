@@ -16,7 +16,7 @@
 
 
                 <?php
-                    $query = "select * from posts" ;
+                    $query = "select * from posts where post_status = 'published' " ;
                     $select_all_posts_query = mysqli_query($connection , $query);
                     while($row = mysqli_fetch_assoc($select_all_posts_query))
                     {
@@ -26,8 +26,6 @@
                         $post_date = $row['post_date'];
                         $post_image = $row['post_image'];
                         $post_content = substr( $row['post_content'],0,50);
-                    
-
                     ?>
 
                 <h1 class="page-header">

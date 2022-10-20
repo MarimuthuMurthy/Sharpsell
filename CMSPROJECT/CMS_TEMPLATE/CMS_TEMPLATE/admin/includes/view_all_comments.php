@@ -40,13 +40,13 @@
             while ($row = mysqli_fetch_assoc($result1)) {
                 $post_id = $row['post_id'];
                 $post_title = $row['post_title'];
-                echo '<td><a href="../post.php?p_id=<?= $post_id?>"><?= $post_title ?></a></td>';
+                echo "<td><a href='../post.php?p_id={$post_id}'>{$post_title}</a></td>";
             }
             echo "<td>$comment_date</td>";
-            echo '<td><a href="posts.php?source=edit_post&edit_id=">Approve</a></td>';
-            echo '<td><a href="posts.php?source=<?php $comment_id ?>">UnApprove</a></td>';
+            echo "<td><a href='comments.php?approve=$comment_id'>Approve</a></td>";
+            echo "<td><a href='comments.php?unapprove= $comment_id'>UnApprove</a></td>";
             echo '<td><a href="posts.php?source=edit_post&edit_id=">edit</a></td>';
-            echo '<td><a href="comments.php?delete=<?php $comment_id ?>">delete</a></td>';
+            echo "<td><a href='comments.php?delete= $comment_id' >delete</a></td>";
 
             echo "</tr>";
         }
@@ -54,6 +54,26 @@
     </tbody>
 </table>
 <?php
+
+
+#*************************for approval **************************#
+if (isset($_GET['approve'])) {
+    $approve_id = $_GET['approve'];
+    $query = "update comments set  comment_status = 'approved' where comment_id = '$approve_id'";
+    mysqli_query($connection, $query) or die("connection failed");
+    header("Location: comments.php");
+}
+
+
+#************************for unapproval**************************#
+if (isset($_GET['unapprove'])) {
+    $unapprove_id = $_GET['unapprove'];
+    $query = "update comments set  comment_status = 'unapproved' where comment_id = '$unapprove_id'";
+    mysqli_query($connection, $query) or die("connection failed");
+    header("Location: comments.php");
+}
+
+#***********************for comment deletion*********************#
 if (isset($_GET['delete'])) {
     $del_id = $_GET['delete'];
     $query = "delete from comments where comment_id = '{$comment_id}'";
