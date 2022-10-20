@@ -82,9 +82,7 @@
 <?php
 if (isset($_GET['delete'])) {
     $del_id = $_GET['delete'];
-    $update_down = "update posts set post_comment_count = post_comment_count-1 where post_id = '{$del_id}'";
     $query = "delete from posts where post_id = '{$del_id}'";
-    mysqli_query($connection , $update_down);
     mysqli_query($connection, $query) or die("connection failed");
     header("Location: posts.php");
 }
