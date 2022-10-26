@@ -11,7 +11,7 @@ if (isset($_GET['user_id'])) {
         $present_user_password = $present_user['user_password'];
         $present_user_image = $present_user['user_image'];
         $present_user_email = $present_user['user_email'];
-        $present_user_role = $present_user['user_role'];
+        $user_role = $present_user['user_role'];
     }
 }
 
@@ -19,13 +19,21 @@ if (isset($_POST['edit_user'])) {
     $new_user_name = $_POST['username'];
     $new_user_firstname = $_POST['firstname'];
     $new_user_lastname = $_POST['lastname'];
+    $new_user_password = $_POST['password'];
+
+    $encrypt_password_query = "select randSalt from users";
+    $execute_randsalt = mysqli_query($connection , $encrypt_password_query) or die("connection failed".mysqli_error($connection));
+    $row = mysqli_fetch_assoc($execute_randsalt);
+    $salt = $row['randSalt'];
+    $hashed_password = crypt($new_user_password, $salt);
+
     $new_user_image = $_FILES['image']['name'];
     $new_user_temp_image = $_FILES['image']['tmp_name'];
     $new_user_email = $_POST['email'];
-    $new_user_role = $_POST['role'];
+    $user_role = $_POST['role'];
     move_uploaded_file($new_user_temp_image, "../images/$new_user_image");
     $new_add_user_query  = "update  users set ";
-    $new_add_user_query .= "user_name = '{$new_user_name}' , user_firstname = '{$new_user_firstname}',user_lastname='{$new_user_lastname}', user_email='{$new_user_email}' , user_image='{$new_user_image}', user_role='{$new_user_role}' ";
+    $new_add_user_query .= "user_name = '{$new_user_name}' , user_firstname = '{$new_user_firstname}',user_lastname='{$new_user_lastname}', user_email='{$new_user_email}' ,user_password = '{$hashed_password}', user_image='{$new_user_image}', user_role='{$user_role}' ";
     $new_add_user_query .= "where user_id = '{$present_user_id}'";
     $new_add_user_execution = mysqli_query($connection, $new_add_user_query) or die("connection failed" . mysqli_error($connection));
 }
@@ -55,7 +63,7 @@ if (isset($_POST['edit_user'])) {
     </div>
     <div class="form-group">
         <label for="image">Image</label>
-        <input type="file" name="image">
+        <input type="file" value="<?= $present_user_image?>" name="image">
     </div>
     <div class="form-group">
         <label for="email">Email</label>
@@ -64,9 +72,16 @@ if (isset($_POST['edit_user'])) {
     <div class="form-group">
         <label for="role">Role </label>
         <select name="role">
-            <option value=<?= $present_user_role ?>><?= $present_user_role ?></option>
-            <option value="admin">admin</option>
-            <option value="subscriber">Subscriber</option>t
+            <option value=<?= $user_role ?>><?= $user_role ?></option>
+            <?php 
+            if($user_role == 'subscriber')
+            {
+                echo "<option value='admin'>admin</option>";
+            }
+            else{
+                echo' <option value="subscriber">Subscriber</option>';
+            }
+            ?>
         </select>
     </div>
     <div class="form-group">

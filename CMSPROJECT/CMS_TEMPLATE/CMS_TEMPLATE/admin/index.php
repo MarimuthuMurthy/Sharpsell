@@ -21,7 +21,6 @@
                         Welcome to admin
                         <small><?= $_SESSION['username'] ?></small>
                     </h1>
-
                 </div>
             </div>
             <!-- /.row -->
@@ -155,17 +154,21 @@
 
 
             <?php
-                $draft_post_query = "select * from posts where post_status = 'draft'";
-                $execute_draft_post = mysqli_query($connection, $draft_post_query);
-                $no_of_draft_post = mysqli_num_rows($execute_draft_post);
+            $published_post_query = "select * from posts where post_status = 'Published'";
+            $execute_published_post = mysqli_query($connection, $published_post_query);
+            $no_of_published_post = mysqli_num_rows($execute_published_post);
 
-                $unapproved_comment_query = "select * from comments where comment_status = 'unapproved'";
-                $execute_unapproved_comment = mysqli_query($connection, $unapproved_comment_query);
-                $no_of_unapproved_comment = mysqli_num_rows($execute_unapproved_comment);
+            $draft_post_query = "select * from posts where post_status = 'Draft'";
+            $execute_draft_post = mysqli_query($connection, $draft_post_query);
+            $no_of_draft_post = mysqli_num_rows($execute_draft_post);
 
-                $user_subscriber_query = "select * from users where user_role = 'Subscriber'";
-                $execute_user_subscriber = mysqli_query($connection, $user_subscriber_query);
-                $no_of_user_subscriber = mysqli_num_rows($execute_user_subscriber);
+            $unapproved_comment_query = "select * from comments where comment_status = 'unapproved'";
+            $execute_unapproved_comment = mysqli_query($connection, $unapproved_comment_query);
+            $no_of_unapproved_comment = mysqli_num_rows($execute_unapproved_comment);
+
+            $user_subscriber_query = "select * from users where user_role = 'Subscriber'";
+            $execute_user_subscriber = mysqli_query($connection, $user_subscriber_query);
+            $no_of_user_subscriber = mysqli_num_rows($execute_user_subscriber);
             ?>
 
 
@@ -183,30 +186,13 @@
 
                             <?php
 
-                            $elements_text = ['Active Post','Draft posts','Comments','pending comments','Users','Subscribers count','Categories'];
-                            $element_count = [$no_of_posts,$no_of_draft_post,$no_of_comments,$no_of_unapproved_comment,$no_of_users,$no_of_user_subscriber,$no_of_category];
+                            $elements_text = ['Active Post','Published posts', 'Draft posts', 'Comments', 'pending comments', 'Users', 'Subscribers count', 'Categories'];
+                            $element_count = [$no_of_posts,$no_of_published_post, $no_of_draft_post, $no_of_comments, $no_of_unapproved_comment, $no_of_users, $no_of_user_subscriber, $no_of_category];
 
 
-                            for($i = 0 ; $i<7; $i++)
-                            { 
-                                echo "['{$elements_text[$i]}'".","."{$element_count[$i]}],";
+                            for ($i = 0; $i < 7; $i++) {
+                                echo "['{$elements_text[$i]}'" . "," . "{$element_count[$i]}],";
                             }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
                             ?>
                         ]);
@@ -224,6 +210,168 @@
                     }
                 </script>
                 <div id="columnchart_material" style="width: 'auto'; height: 500px;"></div>
+            </div>
+
+
+
+
+
+
+
+            <div class = "row">
+            <style>
+            #chartdiv {
+            width: 100%;
+            height: 500px;
+            }
+            </style>
+                                <!-- Chart code -->
+            <script>
+            am5.ready(function() {
+
+            // Create root element
+            // https://www.amcharts.com/docs/v5/getting-started/#Root_element
+            var root = am5.Root.new("chartdiv");
+
+            // Set themes
+            // https://www.amcharts.com/docs/v5/concepts/themes/
+            root.setThemes([
+            am5themes_Animated.new(root)
+            ]);
+
+            // Create chart
+            // https://www.amcharts.com/docs/v5/charts/radar-chart/
+            var chart = root.container.children.push(am5radar.RadarChart.new(root, {
+            panX: false,
+            panY: false,
+            wheelX: "panX",
+            wheelY: "zoomX",
+            innerRadius: am5.percent(20),
+            startAngle: -90,
+            endAngle: 180
+            }));
+
+            var data = [];
+            <?php
+                for($i = 0 ; $i<7 ;$i++)
+                {
+            ?>
+                data.push({
+                    category:"<?= $elements_text[$i]?>",
+                    value:<?= $element_count[$i]?>,
+                    full:100,
+                    columnSettings:{
+                        fill: chart.get("colors").getIndex(<?= $i?>)
+                    }
+                });
+                    
+            <?php } ?>
+            
+            // Add cursor
+            // https://www.amcharts.com/docs/v5/charts/radar-chart/#Cursor
+            var cursor = chart.set("cursor", am5radar.RadarCursor.new(root, {
+            behavior: "zoomX"
+            }));
+
+            cursor.lineY.set("visible", false);
+
+            // Create axes and their renderers
+            // https://www.amcharts.com/docs/v5/charts/radar-chart/#Adding_axes
+            var xRenderer = am5radar.AxisRendererCircular.new(root, {
+            //minGridDistance: 50
+            });
+
+            xRenderer.labels.template.setAll({
+            radius: 10
+            });
+
+            xRenderer.grid.template.setAll({
+            forceHidden: true
+            });
+
+            var xAxis = chart.xAxes.push(am5xy.ValueAxis.new(root, {
+            renderer: xRenderer,
+            min: 0,
+            max: 100,
+            strictMinMax: true,
+            numberFormat: "#'%'",
+            tooltip: am5.Tooltip.new(root, {})
+            }));
+
+
+            var yRenderer = am5radar.AxisRendererRadial.new(root, {
+            minGridDistance: 20
+            });
+
+            yRenderer.labels.template.setAll({
+            centerX: am5.p100,
+            fontWeight: "500",
+            fontSize: 18,
+            templateField: "columnSettings"
+            });
+
+            yRenderer.grid.template.setAll({
+            forceHidden: true
+            });
+
+            var yAxis = chart.yAxes.push(am5xy.CategoryAxis.new(root, {
+            categoryField: "category",
+            renderer: yRenderer
+            }));
+
+            yAxis.data.setAll(data);
+
+
+            // Create series
+            // https://www.amcharts.com/docs/v5/charts/radar-chart/#Adding_series
+            var series1 = chart.series.push(am5radar.RadarColumnSeries.new(root, {
+            xAxis: xAxis,
+            yAxis: yAxis,
+            clustered: false,
+            valueXField: "full",
+            categoryYField: "category",
+            fill: root.interfaceColors.get("alternativeBackground")
+            }));
+
+            series1.columns.template.setAll({
+            width: am5.p100,
+            fillOpacity: 0.08,
+            strokeOpacity: 0,
+            cornerRadius: 20
+            });
+
+            series1.data.setAll(data);
+
+
+            var series2 = chart.series.push(am5radar.RadarColumnSeries.new(root, {
+            xAxis: xAxis,
+            yAxis: yAxis,
+            clustered: false,
+            valueXField: "value",
+            categoryYField: "category"
+            }));
+
+            series2.columns.template.setAll({
+            width: am5.p100,
+            strokeOpacity: 0,
+            tooltipText: "{category}: {valueX}%",
+            cornerRadius: 20,
+            templateField: "columnSettings"
+            });
+
+            series2.data.setAll(data);
+
+            // Animate chart and series in
+            // https://www.amcharts.com/docs/v5/concepts/animations/#Initial_animation
+            series1.appear(1000);
+            series2.appear(1000);
+            chart.appear(1000, 100);
+
+            }); // end am5.ready()
+            </script>
+
+            <!-- HTML -->
+            <div id="chartdiv"></div>
             </div>
 
 

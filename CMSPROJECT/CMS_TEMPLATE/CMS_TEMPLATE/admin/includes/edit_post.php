@@ -44,11 +44,11 @@ if (isset($_POST['edited_post'])) {
     $query .= "post_status = '{$post_status}', ";
     $query .= "post_tags='{$post_tags}' ";
     $query .= "where post_id = '{$edit_id}'";
-    mysqli_query($connection, $query) or die(mysqli_error($connection));
-    
+    mysqli_query($connection, $query) or die(mysqli_error($connection).mysqli_error($connection));
+    echo "<h1 class ='bg-success' <span style='color : aqua ; text-align: center;'>POST UPDATED</span></h1>";
+    echo "<p class = 'bg=success'><a href='../post.php?p_id={$post_id}'>View post  </a> or <a href='posts.php'>Edit more posts</a></p>"; 
 }
 ?>
-
 <form action="" method="post" enctype="multipart/form-data">
     <div class="form-group">
         <label for="title">Post Title</label>
@@ -74,7 +74,13 @@ if (isset($_POST['edited_post'])) {
     </div>
     <div class="form-group">
         <label for="post_status">Post status</label>
-        <input value="<?= $post_status ?>" type="text" class="form-control" name="post_status">
+        <div>
+            <select name="post_status" id="">
+                <option value="<?= $post_status ?>"><?= $post_status ?></option>
+                <option value="Published">Published</option>
+                <option value="Draft">Draft</option>
+            </select>
+        </div>
     </div>
     <div class="form-group">
         <img width="100" src="../images/<?= $post_image ?>" alt="">
@@ -85,8 +91,8 @@ if (isset($_POST['edited_post'])) {
         <input value="<?= $post_tags  ?>" type="text" class="form-control" name="post_tags">
     </div>
     <div class="form-group">
-        <label for="post_content">Post Content</label>
-        <textarea class="form-control" name="post_content" id="" cols="30" rows="10"><?= $post_content ?></textarea>
+        <label for="summernote">Post Content</label>
+        <textarea class="form-control" name="post_content" id="summernote" cols="30" rows="10"><?= $post_content ?></textarea>
     </div>
     <div class="form-group">
         <input class="btn btn-primary" type="submit" name="edited_post" value="Publish status">

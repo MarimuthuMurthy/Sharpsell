@@ -1,5 +1,6 @@
 
 <!-- Navigation -->
+<?php session_start()?>
 <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
         <div class="container">
             <!-- Brand and toggle get grouped for better mobile display -->
@@ -26,6 +27,20 @@
                         }
                     ?>
                     <li><a href="admin">admin</a></li>
+                    <li><a href="registration.php">Registration</a></li>
+                    <?php
+                        if(isset($_SESSION['role']))
+                        {
+                            if(isset($_GET['p_id']))
+                            {
+                                $post_id = $_GET['p_id'];
+                                echo "<li><a href='admin/posts.php?source=edit_post&edit_id={$post_id}'>Edit post</a></li>";
+                            }
+                        }
+                    ?>
+
+
+
                 </ul>
             </div>
             <!-- /.navbar-collapse -->

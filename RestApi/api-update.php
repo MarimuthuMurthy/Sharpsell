@@ -14,7 +14,7 @@ $studentId = $data['sId'];
 $studentName = $data['sname'];
 $studentDept = $data['sdept'];
 $studentyear = $data['syear'];
-$sql = "update student set  id = '{$studentId}',name = '{$studentName}',department='{$studentDept}',year = '{$studentyear}' where id = '{$studentId}'";
+$sql = "update student set  id = '{$studentId}',name = '{$studentName}',department='{$studentDept}' where id = '{$studentId}'";
 if(mysqli_query($conn , $sql))
 {
     echo json_encode(array("message"=>"Student record updated . ","status"=>true));

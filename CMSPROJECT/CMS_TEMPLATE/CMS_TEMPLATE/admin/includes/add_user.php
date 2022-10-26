@@ -4,19 +4,28 @@ if(isset($_POST['create_user']))
 $user_name = $_POST['username'];
 $user_firstname = $_POST['firstname'];
 $user_lastname = $_POST['lastname'];
+$user_password = $_POST['password'];
+
+$new_user_encrypt_password_query = "select randSalt from users";
+$new_user_execute_randsalt = mysqli_query($connection , $new_user_encrypt_password_query) or die("connection failed".mysqli_error($connection));
+$row = mysqli_fetch_assoc($new_user_execute_randsalt);
+$salt = $row['randSalt'];
+$new_hashed_password = crypt($user_password, $salt);
+
+
 $user_image = $_FILES['image']['name'];
 $user_temp_image = $_FILES['image']['tmp_name'];
 $user_email = $_POST['email'];
 $user_role = $_POST['role'];
 move_uploaded_file($user_temp_image, "../images/$user_image");
 $add_user_query  = "insert into users";
-$add_user_query .="(user_name , user_firstname,user_lastname, user_email , user_image, user_role)";
-$add_user_query .="values ('{$user_name}','{$user_firstname}','{$user_lastname}','{$user_email}','{$user_image}','{$user_role}')";
+$add_user_query .="(user_name , user_firstname,user_lastname, user_email, user_password , user_image, user_role)";
+$add_user_query .="values ('{$user_name}','{$user_firstname}','{$user_lastname}','{$user_email}','{$new_hashed_password}','{$user_image}','{$user_role}')";
 $add_user_execution = mysqli_query($connection , $add_user_query) ;
 echo mysqli_error($connection);
+echo "<h2 span style='color:violet;'>User created .</h2>";
 }
 ?>
-
 
 
 
@@ -35,6 +44,7 @@ echo mysqli_error($connection);
         <label for="lastname">LastName</label>
         <input type="text" class="form-control" name="lastname">
     </div>
+    
     <div class="form-group">
         <label for="image">Image</label>
         <input type="file" name="image" >
@@ -42,6 +52,10 @@ echo mysqli_error($connection);
     <div class="form-group">
         <label for="email">Email</label>
         <input type="text" class="form-control" name="email">
+    </div>
+    <div class="form-group">
+        <label for="password">Password</label>
+        <input type="password" class="form-control" name="password">
     </div>
     <div class="form-group">
         <label for="role">Role </label>

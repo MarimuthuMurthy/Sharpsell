@@ -18,6 +18,7 @@ if (isset($_POST['login'])) {
         $login_check_user_lastname  = $login_user['user_lastname'];
         $login_check_user_role = $login_user['user_role'];
     }
+    $login_password = crypt($login_password , $login_check_password);
     if ($login_username === $login_check_username && $login_password === $login_check_password) {
         $_SESSION['username'] = $login_check_username;
         $_SESSION['firstname'] = $login_check_user_firstname;

@@ -11,12 +11,13 @@ if (isset($_POST['create_post'])) {
     $post_tags = $_POST['post_tags'];
     $post_content = $_POST['post_content'];
     $post_date = date('d-m-Y');
-    // $post_comment_count = 4;
     move_uploaded_file($post_image_temp, "../images/$post_image");
     $query = "insert into posts(post_category_id , post_title , post_author,post_date,post_image,post_content,post_tags ,post_status) values ";
     $query .= "('{$post_category_id}','{$post_title}','{$post_author}',now(),'{$post_image}','{$post_content}','{$post_tags}','{$post_status}')";
     mysqli_query($connection, $query) or die("Query failed");
-    
+    $the_post_id = mysqli_insert_id($connection);
+    echo "<h1 class ='bg-success' <span style='color : aqua ; text-align: center;'>POST CREATED</span></h1>";
+    echo "<p class = 'bg=success'><a href='../post.php?p_id={$the_post_id}'>View post  </a> or <a href='posts.php'>Edit more posts</a></p>"; 
 }
 
 ?>
@@ -57,8 +58,13 @@ if (isset($_POST['create_post'])) {
         <input type="text" class="form-control" name="author">
     </div>
     <div class="form-group">
-        <label for="post_status">Post status</label>
-        <input type="text" class="form-control" name="post_status">
+        <label for="post_status">Post Status</label>
+        <div>
+            <select name="post_status" id="">
+                <option value="Published">Published</option>
+                <option value="Draft">Draft</option>
+            </select>
+        </div>
     </div>
     <div class="form-group">
         <label for="post_image">Post image</label>
@@ -69,8 +75,8 @@ if (isset($_POST['create_post'])) {
         <input type="text" class="form-control" name="post_tags">
     </div>
     <div class="form-group">
-        <label for="post_content">Post Content</label>
-        <textarea class="form-control" name="post_content" id="" cols="30" rows="10"></textarea>
+        <label for="summernote">Post Content</label>
+        <textarea class="form-control" name="post_content" id="summernote" cols="30" rows="10"></textarea>
     </div>
     <div class="form-group">
         <input class="btn btn-primary" type="submit" name="create_post" value="Publish status">

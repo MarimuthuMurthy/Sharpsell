@@ -1,6 +1,5 @@
 <?php include "../admin/includes/admin_header.php" ?>
-<?php include "functions.php" ?>
-
+<?php include_once "functions1.php" ?>
 
 <?php
 if(isset($_SESSION['username']))
