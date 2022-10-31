@@ -15,10 +15,21 @@
             <?php
             if (isset($_GET['p_id'])) {
                 $post_id = $_GET['p_id'];
-                $view_count_query = "update posts set post_view_count = post_view_count+1 where post_id = $post_id";
-                mysqli_query($connection , $view_count_query)or die("connection failed ".mysqli_error($connection));
-                $query = "select * from posts where post_id = '$post_id'";
-                $select_all_posts_query = mysqli_query($connection, $query);
+                $view_count_query = "update posts set post_view_count = post_view_count+1 where post_id = {$post_id}";
+                mysqli_query($connection , $view_count_query)or die("connection failed 2 ".mysqli_error($connection));
+
+                if(isset($_SESSION['role']) && $_SESSION['role']=='admin')
+                {
+                    $query = "select * from posts where post_id =$post_id";
+                }
+                else{
+                    $query = "select * from posts where post_id = '$post_id' and post_status ='published'";
+                }
+                $select_all_posts_query = mysqli_query($connection, $query) or die("connection failed ".mysqli_error($connection));
+                if(mysqli_num_rows($select_all_posts_query)<1)
+                {
+                    echo "<h1 class='text-center'>NO POSTS AVAILABLE</h1>";
+                }else{
                 while ($row = mysqli_fetch_assoc($select_all_posts_query)) {
                     $post_title = $row['post_title'];
                     $post_author = $row['post_author'];
@@ -31,7 +42,7 @@
 
                     <h1 class="page-header">
 
-                        <small>Secondary Text</small>
+                        posts
                     </h1>
 
                     <!-- First Blog Post -->
@@ -52,9 +63,7 @@
 
 
             <?php }
-            } else {
-                header("Location: index.php");
-            } ?>
+             ?>
             <!-- Blog Comments -->
 
             <!-- Comments Form -->
@@ -69,8 +78,8 @@
                     $query = "insert into comments (comment_post_id , comment_author , comment_email ,comment_content , comment_status , comment_date)";
                     $query .= "values ('{$the_post_id}','{$comment_author}','{$comment_email}','{$comment_content}','unApproved',now())";
                     $result = mysqli_query($connection, $query) or die("query failed");
-                    $update_count = "update posts set post_comment_count = post_comment_count+1 where post_id = '{$the_post_id}'";
-                    $update_count_result = mysqli_query($connection, $update_count);
+
+
                 } else {
                     echo "<script>alert('Fields cannt be empty')</script>";
                 }
@@ -130,7 +139,9 @@
                     </div>
                 </div>
 
-            <?php } ?>
+            <?php } } }else {
+                header("Location: index.php");
+            }?>
 
 
 

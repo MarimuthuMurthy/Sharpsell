@@ -44,7 +44,7 @@ if (!isset($_SESSION['role'])) {
     <link rel="stylesheet" href="css/summernote.css">
 
         <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
-    </head>
+    
 
     <!-- solid guage -->
     <script src="https://cdn.amcharts.com/lib/5/index.js"></script>
@@ -52,6 +52,10 @@ if (!isset($_SESSION['role'])) {
     <script src="https://cdn.amcharts.com/lib/5/radar.js"></script>
     <script src="https://cdn.amcharts.com/lib/5/themes/Animated.js"></script>
 
+     <script src="js/jquery.js"></script>
+
+
+    </head>
 
 
 <body>

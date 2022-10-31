@@ -88,7 +88,7 @@ if(isset($_POST['update_profile']))
                     </div>
                     <div class="form-group">
                         <label for="password">Password</label>
-                        <input value="<?= $session_user_password ?>" type="password" class="form-control" name="password">
+                        <input autocomplete="off" value="" type="password" class="form-control" name="password">
                     </div>
                     <div class="form-group">
                         <label for="email">Email</label>

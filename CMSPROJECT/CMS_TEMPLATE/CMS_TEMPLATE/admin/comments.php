@@ -1,5 +1,5 @@
 <?php include "../admin/includes/admin_header.php" ?>
-<?php include "functions.php" ?>
+<?php include_once "functions1.php" ?>
 <?php ob_start() ?>
 
 
@@ -38,8 +38,8 @@
                     }
                     switch ($source) {
                         
-                        case 'add_post':
-                            include "includes/add_post.php";
+                        case 'post_comments':
+                            include "includes/post_comments.php";
                             break;
                         case 'edit_post':
                             include "includes/edit_post.php";

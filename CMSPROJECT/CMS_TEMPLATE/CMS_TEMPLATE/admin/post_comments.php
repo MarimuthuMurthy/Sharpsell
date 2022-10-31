@@ -1,3 +1,34 @@
+<?php include "../admin/includes/admin_header.php" ?>
+<?php include_once "functions1.php" ?>
+<?php ob_start() ?>
+
+
+
+<div id="wrapper">
+
+
+
+
+    <?php #redirect to admin/functions.php
+    ?>
+    <?php insert_categories() ?>
+
+
+    <!-- Navigation -->
+    <?php include "../admin/includes/admin_navigation.php" ?>
+    <div id="page-wrapper">
+
+        <div class="container-fluid">
+
+            <!-- Page Heading -->
+            <div class="row">
+                <div class="col-lg-12">
+
+                    <!-- heading -->
+                    <h1 class="page-header">
+                        Welcome to post comments section
+                        <small>Author</small>
+                    </h1>
 <?php
 
 if(isset($_POST['checkBoxArray1']))
@@ -65,7 +96,7 @@ if(isset($_POST['checkBoxArray1']))
     <tbody>
         
         <?php
-        $query = "select * from comments";
+        $query = "select * from comments where comment_post_id = " . mysqli_real_escape_string($connection,$_GET['post_id']). " ";
         $result = mysqli_query($connection, $query) or die("Query failed");
 
         while ($row = mysqli_fetch_assoc($result)) {
@@ -96,9 +127,9 @@ if(isset($_POST['checkBoxArray1']))
             <td><a href='../post.php?p_id=<?=$post_id?>'><?=$post_title?></a></td>
 
             <td><?=$comment_date?></td>
-            <td><a href='comments.php?approve=<?=$comment_id?>'>Approve</a></td>
-            <td><a href='comments.php?unapprove=<?=$comment_id?>'>UnApprove</a></td>
-            <td><a href='comments.php?delete=<?=$comment_id?>' >delete</a></td>
+            <td><a href='comments.php?approve=<?=$comment_id?>&post_id=<?=$_GET['post_id']?>'>Approve</a></td>
+            <td><a href='comments.php?unapprove=<?=$comment_id?>&post_id=<?=$_GET['post_id']?>'>UnApprove</a></td>
+            <td><a href='post_comments.php?delete=<?=$comment_id?>&post_id=<?=$_GET['post_id']?>' >delete</a></td>
         
         <?php } ?>
         </tr>
@@ -113,7 +144,7 @@ if (isset($_GET['approve'])) {
     $approve_id = $_GET['approve'];
     $query = "update comments set  comment_status = 'approved' where comment_id = '$approve_id'";
     mysqli_query($connection, $query) or die("connection failed");
-    header("Location:  comments.php");
+    header("Location: post_comments.php?post_id={$_GET['post_id']}");
 }
 
 
@@ -122,7 +153,7 @@ if (isset($_GET['unapprove'])) {
     $unapprove_id = $_GET['unapprove'];
     $query = "update comments set  comment_status = 'unapproved' where comment_id = '$unapprove_id'";
     mysqli_query($connection, $query) or die("connection failed");
-    header("Location: comments.php");
+    header("Location: post_comments.php?post_id={$_GET['post_id']}");
 }
 
 #***********************for comment deletion*********************#
@@ -130,6 +161,20 @@ if (isset($_GET['delete'])) {
     $del_id = $_GET['delete'];
     $query = "delete from comments where comment_id = '{$comment_id}'";
     mysqli_query($connection, $query) or die("connection failed");
-    header("Location: comments.php");
+    header("Location: post_comments.php?post_id={$_GET['post_id']}");
 }
 ?>
+                </div>
+            </div>
+            <!-- /.row -->
+
+        </div>
+        <!-- /.container-fluid -->
+
+    </div>
+    <!-- /#page-wrapper -->
+
+</div>
+<!-- /#wrapper -->
+
+<?php include "../admin/includes/admin_footer.php" ?>

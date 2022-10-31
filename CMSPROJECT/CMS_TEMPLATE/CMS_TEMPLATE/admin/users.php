@@ -1,8 +1,13 @@
 <?php include "../admin/includes/admin_header.php" ?>
 <?php include_once "functions1.php" ?>
-<?php ob_start() ?>
+<?php ob_start() ;
 
 
+    if(!is_admin($_SESSION['username']))
+    {
+        header("Location: index.php");
+    }
+?>
 
 <div id="wrapper">
 

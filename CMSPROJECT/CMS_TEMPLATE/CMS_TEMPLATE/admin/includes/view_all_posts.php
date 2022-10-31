@@ -1,5 +1,5 @@
 <?php
-
+include "delete_model.php";
 if (isset($_POST['checkBoxArray'])) {
     foreach ($_POST['checkBoxArray'] as $post_value_Id) {
         $bulk_options = $_POST['BulkOptions'];
@@ -22,14 +22,21 @@ if (isset($_POST['checkBoxArray'])) {
                 while ($each_post = mysqli_fetch_assoc($select_post_query)) {
                     $post_title = $each_post['post_title'];
                     $post_author = $each_post['post_author'];
+                    $post_user = $each_post['post_user'];
                     $post_category_id = $each_post['post_category_id'];
                     $post_status = $each_post['post_status'];
                     $post_image = $each_post['post_image'];
                     $post_tags = $each_post['post_tags'];
                     $post_content = $each_post['post_content'];
                     $post_date = date('d-m-Y');
-                    $query = "insert into posts(post_category_id , post_title , post_author,post_date,post_image,post_content,post_tags ,post_status) values ";
-                    $query .= "('{$post_category_id}','{$post_title}','{$post_author}',now(),'{$post_image}','{$post_content}','{$post_tags}','{$post_status}')";
+
+                    if(empty($post_tags))
+                    {
+                        $post_tags = "general";
+                    }
+
+                    $query = "insert into posts(post_category_id , post_title , post_author,post_user,post_date,post_image,post_content,post_tags ,post_status) values ";
+                    $query .= "('{$post_category_id}','{$post_title}','{$post_author}','{$post_user}',now(),'{$post_image}','{$post_content}','{$post_tags}','{$post_status}')";
                     mysqli_query($connection, $query) or die("Query failed".mysqli_error($connection));
                 }
                 break;
@@ -75,13 +82,15 @@ if (isset($_POST['checkBoxArray'])) {
             <tr>
                 <th><input id="selectAllBoxes" type="checkbox"></th>
                 <th>Id</th>
-                <th>Author</th>
+                <th>users</th>
                 <th>Title</th>
                 <th>Category</th>
                 <th>Status</th>
                 <th>Image</th>
                 <th>Tags</th>
+                <th>View post</th>
                 <th>Comments</th>
+                <th>Visit comments</th>
                 <th>Date</th>
                 <th>View count</th>
                 <th>set view count to 0</th>
@@ -91,12 +100,16 @@ if (isset($_POST['checkBoxArray'])) {
         </thead>
         <tbody>
             <?php
-            $query = "select * from posts order by post_id DESC";
+            // $query = "select * from posts order by post_id DESC";
+            $query = "select posts.post_id , posts.post_author ,posts.post_user,posts.post_title,posts.post_category_id,posts.post_status,posts.post_image , posts.post_tags , posts.post_comment_count , posts.post_date , posts.post_view_count ,";
+            $query .= "categories.cat_id , categories.cat_title ";
+            $query .= "from posts left join categories on posts.post_category_id = categories.cat_id order by posts.post_id DESC";
             $result = mysqli_query($connection, $query) or die("Query failed");
 
             while ($row = mysqli_fetch_assoc($result)) {
                 $post_id = $row['post_id'];
                 $post_author = $row['post_author'];
+                $post_user = $row['post_user'];
                 $post_title = $row['post_title'];
                 $post_category_id = $row['post_category_id'];
                 $post_status = $row['post_status'];
@@ -105,57 +118,56 @@ if (isset($_POST['checkBoxArray'])) {
                 $post_comment_count = $row['post_comment_count'];
                 $post_date = $row['post_date'];
                 $post_views_count = $row['post_view_count'];
-            ?>
+                $cat_title = $row['cat_title'];
+                $cat_id = $row['cat_id'];
+            ?>  
                 <tr>
                     <td><input class='checkBoxes' type="checkbox" name='checkBoxArray[]' value='<?= $post_id ?>'></td>
                     <td><?= $row['post_id'] ?></td>
-                    <td><?= $row['post_author'] ?></td>
-                    <td><a href='../post.php?p_id=<?= $post_id ?>'><?= $row['post_title'] ?></a></td>
-
-
-
 
                     <?php
-                    $query1 = "select * from categories where cat_id = {$post_category_id}";
-                    $result1  = mysqli_query($connection, $query1);
-                    while ($row1 = mysqli_fetch_assoc($result1)) {
-                        $cat_id = $row1['cat_id'];
-                        $cat_title = $row1['cat_title'];
+                    if(!empty($post_author))
+                    {
+                        echo "<td>$post_author</td>";
+                    }
+                    else if(!empty($post_user)){
+                        echo "<td>$post_user</td>";
                     }
                     ?>
+
+
+
+                    
+
+
+
+
+
+                    <td><a href='../post.php?p_id=<?= $post_id ?>'><?= $row['post_title'] ?></a></td>
                     <td><?= $cat_title ?></td>
-
-
-
-
-
-
-
-
-
-
-
 
                     <td><?= $row['post_status'] ?></td>
                     <td> <img width='100' height='50' src=../images/<?= $row['post_image'] ?>></td>
                     <td><?= $row['post_tags'] ?></td>
+                    <td><a class="btn btn-primary" href='../post.php?p_id=<?=$post_id?>'>view post</a></td>
+                    <?php
+                    $count_comments_query = "select * from comments where comment_post_id=$post_id";
+                    $execute_count_comments = mysqli_query($connection , $count_comments_query) or die("connection failed 1 ".mysqli_error($connection));
+                    $post_comment_count = mysqli_num_rows($execute_count_comments);
+                    ?>
                     <td><?= $post_comment_count ?></td>
-
-
-
-
-
-
-
-
-
-
-
+                    <td><a class="btn btn-success" href="post_comments.php?post_id=<?= $row['post_id']?>">visit</a></td>
                     <td><?= $row['post_date'] ?></td>
                     <td><?= $post_views_count?></td>
-                    <td><a class="btn btn-primary" href="posts.php?zero_count=<?= $post_id?>">set 0</a></td>
-                    <td><a onclick="javascript: return confirm('are you sure you want to delete ');" href="posts.php?delete=<?= $post_id ?>">delete</a></td>
-                    <td><a href="posts.php?source=edit_post&edit_id=<?= $post_id ?>">edit</a></td>
+                    <td><a class="btn btn-success" href="posts.php?zero_count=<?= $post_id?>">set 0</a></td>
+                    <!-- <td><a rel="<?//=$post_id?>" href="javascript:void(0)" class="delete_link">delete</a></td> -->
+
+                    <form method="post">
+                        <input type="hidden" name="post_id" value="<?=$post_id?>">
+                        <td><input type="submit" class="btn btn-danger"  name="delete1" value="delete"></td>
+                    </form>
+                    <!-- <td><a onclick="javascript: return confirm('are you sure you want to delete ');" href="posts.php?delete=<?//$post_id ?>">delete</a></td> -->
+                    <td><a class="btn btn-info" href="posts.php?source=edit_post&edit_id=<?= $post_id ?>">edit</a></td>
                 </tr>
 
             <?php } ?>
@@ -164,8 +176,8 @@ if (isset($_POST['checkBoxArray'])) {
     </table>
 </form>
 <?php
-if (isset($_GET['delete'])) {
-    $del_id = $_GET['delete'];
+if (isset($_POST['delete1'])) {
+    $del_id = $_POST['post_id'];
     $query = "delete from posts where post_id = '{$del_id}'";
     mysqli_query($connection, $query) or die("connection failed");
     header("Location: posts.php");
@@ -179,3 +191,14 @@ if (isset($_GET['zero_count'])) {
 }
 
 ?>
+
+<!-- <script>
+    $(document).ready(function(){
+        $(".delete_link").on('click',function(){
+            var id = $(this).attr("rel");
+            var delete_url ="posts.php?delete="+ id +" ";
+            $(".modal_delete_link").attr("href",delete_url);
+            $("#myModal").modal('show');
+        });
+    });
+</script> -->

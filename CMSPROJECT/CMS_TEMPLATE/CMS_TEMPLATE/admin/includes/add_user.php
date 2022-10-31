@@ -5,14 +5,7 @@ $user_name = $_POST['username'];
 $user_firstname = $_POST['firstname'];
 $user_lastname = $_POST['lastname'];
 $user_password = $_POST['password'];
-
-$new_user_encrypt_password_query = "select randSalt from users";
-$new_user_execute_randsalt = mysqli_query($connection , $new_user_encrypt_password_query) or die("connection failed".mysqli_error($connection));
-$row = mysqli_fetch_assoc($new_user_execute_randsalt);
-$salt = $row['randSalt'];
-$new_hashed_password = crypt($user_password, $salt);
-
-
+$new_hashed_password = password_hash($user_password, PASSWORD_BCRYPT, array('cost' => 10));
 $user_image = $_FILES['image']['name'];
 $user_temp_image = $_FILES['image']['tmp_name'];
 $user_email = $_POST['email'];
