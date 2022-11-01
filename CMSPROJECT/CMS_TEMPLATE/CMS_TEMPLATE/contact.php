@@ -6,13 +6,12 @@
 
 if (isset($_POST['contact_submit'])) {
     $to         = "dummymail15892@gmail.com";
-    $subject    =wordwrap($_POST['subject'],70);
+    $subject    = wordwrap($_POST['subject'],70);
     $body       = $_POST['body'];
     $header     = "From : ". $_POST['email'];
     mail($to,$subject,$body,$header);
 } 
 ?>
-
 
 <!-- Navigation -->
 

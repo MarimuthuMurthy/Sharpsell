@@ -1,9 +1,9 @@
-
-
-
 <?php
 
 use LDAP\Connection;
+
+
+
 
 function escape($string)
 {
@@ -149,8 +149,66 @@ function registration_process($username, $email, $password)
     $register_password = password_hash($register_password, PASSWORD_BCRYPT, array('cost' => 12));
     $query = "insert into users (user_name , user_email , user_password , user_role) values ('{$register_username}','{$register_email}','{$register_password}','subscriber')";
     mysqli_query($connection, $query) or die("connection failed" . mysqli_error($connection));
-
 }
+// function login_user($login_username, $login_password)
+// {
+//     global $connection;
+//     $login_username = trim($login_username);
+//     $login_password = trim($login_password);
+//     $login_username = mysqli_real_escape_string($connection, $login_username);
+//     $login_password = mysqli_real_escape_string($connection, $login_password);
+//     $login_check_query_from_users_table = "select * from users where user_name = '{$login_username}'";
+//     $login_check_query_from_users_table_execute = mysqli_query($connection, $login_check_query_from_users_table) or die("query failed" . mysqli_error($connection));
+//     while ($login_user = mysqli_fetch_assoc($login_check_query_from_users_table_execute)) {
+//         $login_check_user_id = $login_user['user_id'];
+//         $login_check_username = $login_user['user_name'];
+//         $login_check_password = $login_user['user_password'];
+//         $login_check_user_firstname = $login_user['user_firstname'];
+//         $login_check_user_lastname  = $login_user['user_lastname'];
+//         $login_check_user_role = $login_user['user_role'];
+//         if ($login_username === $login_check_username && password_verify($login_password, $login_check_password)) {
+//             $_SESSION['username'] = $login_check_username;
+//             $_SESSION['firstname'] = $login_check_user_firstname;
+//             $_SESSION['lastname'] = $login_check_user_lastname;
+//             $_SESSION['role'] = $login_check_user_role;
+
+//             header("Location: admin");
+//         }
+//          else {
+//             return false;
+//         }
+//     }
+
+//     return true;
+// $login_password = crypt($login_password , $login_check_password);
+
+
+function ifItIsMethod($method = null)
+{
+    if ($_SERVER['REQUEST_METHOD'] == strtoupper($method)) {
+        return true;
+    }
+    return false;
+}
+
+function isLoggedIn()
+{
+    if (isset($_SESSION['role'])) {
+        return true;
+    }
+    return false;
+}
+
+function checkIfUserIsLoggedInAndRedirect($redirectLocation = null)
+{
+    if (isLoggedIn()) {
+        header("Location: $redirectLocation");
+    }
+}
+?>
+
+
+<?php
 function login_user($login_username, $login_password)
 {
     global $connection;
@@ -167,17 +225,22 @@ function login_user($login_username, $login_password)
         $login_check_user_firstname = $login_user['user_firstname'];
         $login_check_user_lastname  = $login_user['user_lastname'];
         $login_check_user_role = $login_user['user_role'];
+        if ($login_username !== $login_check_username && !password_verify($login_password, $login_check_password)) {
+            return false;
+        } else {
+            $_SESSION['username'] = $login_check_username;
+            $_SESSION['firstname'] = $login_check_user_firstname;
+            $_SESSION['lastname'] = $login_check_user_lastname;
+            $_SESSION['role'] = $login_check_user_role;
+?>
+            <script>
+                window.location.href = 'admin'
+            </script>
+<?php
+        }
     }
-    // $login_password = crypt($login_password , $login_check_password);
-    if ($login_username === $login_check_username && password_verify($login_password, $login_check_password)) {
-        $_SESSION['username'] = $login_check_username;
-        $_SESSION['firstname'] = $login_check_user_firstname;
-        $_SESSION['lastname'] = $login_check_user_lastname;
-        $_SESSION['role'] = $login_check_user_role;
-        header("Location: admin");
-    } else {
-        header("Location: index.php");
-    }
+
+    return true;
 }
 
-?> 
+?>

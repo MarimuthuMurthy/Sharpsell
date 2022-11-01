@@ -1,6 +1,6 @@
 <?php include "../CMS_TEMPLATE/includes/db.php" ?>
-<?php require_once "../CMS_TEMPLATE/includes/header.php" ?>
-<?php require_once "../CMS_TEMPLATE/includes/navigation.php" ?>
+<?php include "../CMS_TEMPLATE/includes/header.php" ?>
+<?php include "../CMS_TEMPLATE/includes/navigation.php" ?>
 
 
 
@@ -85,14 +85,9 @@
                 </a>
                 <hr>
                 <p><?php echo $post_content ?></p>
-                <a class="btn btn-primary" href="post.php?p_id=<?= $post_id ?>">Read More <span class="glyphicon glyphicon-chevron-right"></span></a>
-
+                <a class="btn btn-primary" href="post.php?p_id=<?=$post_id?>">Read More <span class="glyphicon glyphicon-chevron-right"></span></a>
                 <hr>
-
-
-
-
-            <?php }}?>
+                <?php }}?>
 
 
 
