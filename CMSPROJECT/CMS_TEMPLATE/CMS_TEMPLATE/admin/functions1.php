@@ -1,9 +1,9 @@
 <?php
+if (!isset($_SESSION)) {
+    session_start();
+}
 
 use LDAP\Connection;
-
-
-
 
 function escape($string)
 {
@@ -15,7 +15,7 @@ function users_online()
     if (isset($_GET['onlineusers'])) {
         global $connection;
         if (!$connection) {
-            session_start();
+            //session_start();
             include("../includes/db.php");
             $session = session_id();
             $time = time();
@@ -52,6 +52,7 @@ function insert_categories()
 }
 
 
+
 function findAllCategories()
 {
     global $connection;
@@ -70,6 +71,12 @@ function findAllCategories()
         echo "<td><a href='Categories.php?edit={$cat_id}'>Edit</a></td>";
         echo "</tr>";
     }
+}
+
+function query($query)
+{
+    global $connection;
+    return mysqli_query($connection, $query);
 }
 
 function record_count($table)
@@ -199,12 +206,45 @@ function isLoggedIn()
     return false;
 }
 
+function loggedInUserId()
+{
+
+    if (isLoggedIn()) {
+        $user_name1 = $_SESSION['username'];
+        $result = query("select * from users where user_name = '{$user_name1}'");
+        $users = mysqli_fetch_array($result);
+        if (mysqli_num_rows($result) >= 1) {
+            return $users['user_id'];
+        }
+    }
+    return false;
+}
+
+function userLikedThisPost($post_id)
+{
+    $user_id = loggedInUserId();
+    $result = query("select * from likes where user_id='{$user_id}'and post_id='{$post_id}'");
+    return mysqli_num_rows($result) >= 1 ? true : false;
+}
+
+function getPostLikes($post_id)
+{
+    $result = query("select * from likes where post_id='{$post_id}'");
+    echo mysqli_num_rows($result);
+}
+
 function checkIfUserIsLoggedInAndRedirect($redirectLocation = null)
 {
     if (isLoggedIn()) {
         header("Location: $redirectLocation");
     }
 }
+
+
+
+
+
+
 ?>
 
 

@@ -62,7 +62,7 @@
                 $post_date = $row['post_date'];
                 $post_image = $row['post_image'];
                 $post_status = $row['post_status'];
-                $post_content = substr($row['post_content'], 0, 400);
+                $post_content = substr($row['post_content'], 0, 200);
                 
             ?>
 
@@ -83,9 +83,10 @@
                 <a href="post.php?p_id=<?= $post_id ?>">
                 <img width="500" height="200" class="img-responsive" src="images/<?= $post_image; ?>" alt="<?php echo $post_title ?>">
                 </a>
-                <hr>
                 <p><?php echo $post_content ?></p>
-                <a class="btn btn-primary" href="post.php?p_id=<?=$post_id?>">Read More <span class="glyphicon glyphicon-chevron-right"></span></a>
+                <hr>
+                
+                <a class="btn btn-primary" href="post.php?p_id=<?=$post_id?>"> Read More <span class="glyphicon glyphicon-chevron-right"></span></a>
                 <hr>
                 <?php }}?>
 
