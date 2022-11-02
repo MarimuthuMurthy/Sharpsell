@@ -3,7 +3,7 @@
 <?php ob_start() ;
 
 
-    if(!is_admin($_SESSION['username']))
+    if(!is_admin())
     {
         header("Location: index.php");
     }

@@ -39,10 +39,7 @@
                     switch ($source) {
                         
                         case 'post_comments':
-                            include "includes/post_comments.php";
-                            break;
-                        case 'edit_post':
-                            include "includes/edit_post.php";
+                            include "post_comments.php";
                             break;
                         default:
                             include "includes/view_all_comments.php";

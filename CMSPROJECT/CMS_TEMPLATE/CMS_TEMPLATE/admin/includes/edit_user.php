@@ -82,7 +82,7 @@ if (isset($_GET['user_id'])) {
     <div class="form-group">
         <label for="role">Role </label>
         <select name="role">
-            <option value=<?= $user_role ?>><?= $user_role ?></option>
+            <option value=<?=$user_role?>><?= $user_role ?></option>
             <?php
             if ($user_role == 'subscriber') {
                 echo "<option value='admin'>admin</option>";
