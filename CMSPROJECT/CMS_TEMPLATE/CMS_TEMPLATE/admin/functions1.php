@@ -5,6 +5,9 @@ if (!isset($_SESSION)) {
 
 use LDAP\Connection;
 
+
+//***************Data base helper functions */
+
 function escape($string)
 {
     global $connection;
@@ -41,9 +44,10 @@ function insert_categories()
 {
     if (isset($_POST['submit'])) {
         $cat_title = $_POST['cat_title'];
+        $user_id = $_SESSION['userId'];
         if (!$_POST['cat_title'] == "" || !empty($cat_title)) {
             global $connection;
-            $query = "insert into categories(cat_title) values ('{$cat_title}')";
+            $query = "insert into categories(cat_title , user_id) values ('{$cat_title}','{$user_id}')";
             mysqli_query($connection, $query) or die("Query failed");
         } else {
             echo "<h2 span style='color: aqua ;' >This field cannot be empty </h2>";
@@ -76,7 +80,8 @@ function findAllCategories()
 function query($query)
 {
     global $connection;
-    return mysqli_query($connection, $query);
+    $result = mysqli_query($connection, $query) or die("connection failed " . mysqli_error($connection));
+    return $result;
 }
 
 function record_count($table)
@@ -103,17 +108,86 @@ function check_role($table, $column_name, $role)
     return mysqli_num_rows($execute_published_post);
 }
 
-function is_admin($username)
+
+function fetch_record($result)
+{
+    return mysqli_fetch_array($result);
+}
+
+//********************users specific End databse helpers */
+function get_all_user_posts()
+{
+    $user_name = get_user_name();
+    $no_of_posts_query = "select * from posts where post_user = '{$user_name}'";
+    return query($no_of_posts_query);
+}
+
+function get_all_post_user_comments()
+{
+    $user_name = get_user_name();
+    $select_all_comments = "select * from posts inner join  comments on posts.post_id = comments.comment_post_id where post_user = '{$user_name}'";
+    return query($select_all_comments);
+}
+
+function get_all_user_categories()
+{
+    $user_id = $_SESSION['userId'];
+    $no_of_category_query = "select * from categories where user_id = '{$user_id}'";
+    return query($no_of_category_query);
+}
+
+function get_all_users_published_posts()
+{
+    $user_name = get_user_name();
+    $no_of_posts_query = "select * from posts where post_user = '{$user_name}' and post_status='published'";
+    return query($no_of_posts_query);
+}
+
+function get_all_users_draft_posts()
+{
+    $user_name = get_user_name();
+    $no_of_posts_query = "select * from posts where post_user = '{$user_name}' and post_status='draft'";
+    return query($no_of_posts_query);
+}
+
+function get_all_users_approved_comments()
+{
+    $user_name = get_user_name();
+    $select_all_approved_comments = "select * from posts inner join  comments on posts.post_id = comments.comment_post_id where post_user = '{$user_name}' and comment_status='approved'";
+    return query($select_all_approved_comments);
+}
+function get_all_users_unapproved_comments()
+{
+    $user_name = get_user_name();
+    $select_all_unapproved_comments = "select * from posts inner join  comments on posts.post_id = comments.comment_post_id where post_user = '{$user_name}' and comment_status='unapproved'";
+    return query($select_all_unapproved_comments);
+}
+
+//********************General helpers */
+
+function get_user_name()
+{
+    if (isset($_SESSION['username'])) {
+        return $_SESSION['username'];
+    }
+}
+
+//**********************ENd data base helpers */
+function is_admin()
 {
     global $connection;
-    $query = "select user_role from users where user_name = '$username'";
-    $result = mysqli_query($connection, $query) or die("Connection failed " . mysqli_error($connection));
-    $row = mysqli_fetch_assoc($result);
-    if ($row['user_role'] == 'Admin') {
-        return true;
-    } else {
-        return false;
+    if (isLoggedIn()) {
+        $user_id = $_SESSION['userId'];
+        $query = "select user_role from users where user_id = '{$user_id}'";
+        $result = mysqli_query($connection, $query) or die("Connection failed " . mysqli_error($connection));
+        $row = mysqli_fetch_assoc($result);
+        if ($row['user_role'] == 'Admin') {
+            return true;
+        } else {
+            return false;
+        }
     }
+    return false;
 }
 
 
@@ -268,6 +342,7 @@ function login_user($login_username, $login_password)
         if ($login_username !== $login_check_username && !password_verify($login_password, $login_check_password)) {
             return false;
         } else {
+            $_SESSION['userId'] = $login_check_user_id;
             $_SESSION['username'] = $login_check_username;
             $_SESSION['firstname'] = $login_check_user_firstname;
             $_SESSION['lastname'] = $login_check_user_lastname;
